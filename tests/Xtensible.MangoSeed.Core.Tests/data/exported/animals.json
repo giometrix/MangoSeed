@@ -1,0 +1,17 @@
+{
+    "_id": ObjectId("6135a1a189a0706fe2862884"),
+  "type" : "cat",
+  "name" : "Sammy"
+}
+
+{
+  "_id" : ObjectId("6135a1ab89a0706fe2862885"),
+  "type" : "cat",
+  "name" : "Oscar"
+}
+
+{
+  "_id" : ObjectId("6135a1b289a0706fe2862886"),
+  "type" : "cat",
+  "name" : "Lucky"
+}

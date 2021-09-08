@@ -1,0 +1,13 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+      <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AsyncEnumerator" Version="4.0.2" />
+    <PackageReference Include="MongoDB.Driver" Version="2.13.1" />
+  </ItemGroup>
+
+</Project>

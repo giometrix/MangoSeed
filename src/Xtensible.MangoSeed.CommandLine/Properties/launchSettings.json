@@ -1,0 +1,8 @@
+{
+    "profiles": {
+        "Xtensible.MangoSeed.CommandLine": {
+            "commandName": "Project",
+            "commandLineArgs": "import -f animals.json -d test-copy --existing-entry-behavior replace"
+        }
+    }
+}
