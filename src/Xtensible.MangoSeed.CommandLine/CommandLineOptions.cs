@@ -75,7 +75,7 @@ namespace Xtensible.MangoSeed.CommandLine
         [Option("batch-size", Required = false,
             HelpText =
                 "Number of documents to batch when inserting.  Use a higher number for small documents and a smaller number for very large documents",
-            Default = 50)]
+            Default = 500)]
         public int BatchSize { get; set; }
 
         [Option("existing-entry-behavior", Required = false,
