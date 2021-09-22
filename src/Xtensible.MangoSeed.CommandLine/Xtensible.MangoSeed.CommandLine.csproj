@@ -5,6 +5,12 @@
         <TargetFramework>net5.0</TargetFramework>
         <Nullable>enable</Nullable>
         <AssemblyName>MangoSeed</AssemblyName>
+        <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+        <PackageLicenseExpression>MIT</PackageLicenseExpression>
+        <Authors>Giovanni Galbo</Authors>
+        <Description>A command line wrapper around MangoSeed.Core to Import/Export data from MongoDb</Description>
+        <PackAsTool>true</PackAsTool>
+        <ToolCommandName>mangoseed</ToolCommandName>
     </PropertyGroup>
 
     <ItemGroup>

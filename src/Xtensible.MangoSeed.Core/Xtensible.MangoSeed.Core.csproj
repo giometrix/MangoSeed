@@ -3,6 +3,11 @@
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
       <Nullable>enable</Nullable>
+      <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+      <Authors>Giovanni Galbo</Authors>
+      <Description>Import/Export data from MongoDb</Description>
+      <PackageLicenseExpression>MIT</PackageLicenseExpression>
+      <PackageId>MangoSeed.Core</PackageId>
   </PropertyGroup>
 
   <ItemGroup>
