@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.Globalization;
 using System.IO;
 using System.Reflection;
 using System.Threading.Tasks;
@@ -63,23 +65,27 @@ namespace Xtensible.MangoSeed.CommandLine
 
                     Info(section, "Beginning import...");
 
-                    var source = options.Source;
-                    if (Directory.Exists($"{source}"))
+                    var elapsedTime = await TimedOperation(async () =>
                     {
-                        Info(section, $"{source} is a directory, recursively processing all .json files ...");
-                        var files = Directory.EnumerateFiles(source, "*.json", SearchOption.AllDirectories);
-                        await ProcessImport(mongoSettings, files, options, section);
-                    }
-                    else if (File.Exists($"{source}"))
-                    {
-                        Info(section, $"{source} is a file, processing...");
-                        await ProcessImport(mongoSettings, new[] { source }!, options, section);
-                    }
-                    else
-                    {
-                        Error(section, $"{source} does not exist.  Exiting...");
-                        Environment.Exit(UserErrorExitCode);
-                    }
+                        var source = options.Source;
+                        if (Directory.Exists($"{source}"))
+                        {
+                            Info(section, $"{source} is a directory, recursively processing all .json files ...");
+                            var files = Directory.EnumerateFiles(source, "*.json", SearchOption.AllDirectories);
+                            await ProcessImport(mongoSettings, files, options, section);
+                        }
+                        else if (File.Exists($"{source}"))
+                        {
+                            Info(section, $"{source} is a file, processing...");
+                            await ProcessImport(mongoSettings, new[] { source }!, options, section);
+                        }
+                        else
+                        {
+                            Error(section, $"{source} does not exist.  Exiting...");
+                            Environment.Exit(UserErrorExitCode);
+                        }
+                    });
+                    Info(section, elapsedTime);
                 });
 
                 await result.WithParsedAsync<ExportOptions>(async options =>
@@ -93,29 +99,33 @@ namespace Xtensible.MangoSeed.CommandLine
                     }
 
                     var exporter = new Exporter(mongoSettings);
-                    try
+                    var elapsedTime = await TimedOperation(async () =>
                     {
-                        Info(section,
-                            $"Querying {options.Server}/{options.Database}/{options.Collection} with query {options.Query}");
-                        await using var fileStream = File.CreateText(destination);
-                        var result = await exporter.ExportAsync(options.Database, options.Collection, options.Query,
-                            fileStream.BaseStream, GetExportSettings(options));
-                        await fileStream.FlushAsync();
-                        Log(section, result);
-                        if (result.IsSuccess)
+                        try
                         {
-                            Info(section, $"Results written to {destination}");
+                            Info(section,
+                                $"Querying {options.Server}/{options.Database}/{options.Collection} with query {options.Query}");
+                            await using var fileStream = File.CreateText(destination);
+                            var exportResult = await exporter.ExportAsync(options.Database, options.Collection, options.Query,
+                                fileStream.BaseStream, GetExportSettings(options));
+                            await fileStream.FlushAsync();
+                            Log(section, exportResult);
+                            if (exportResult.IsSuccess)
+                            {
+                                Info(section, $"Results written to {destination}");
+                            }
+                            else
+                            {
+                                Environment.Exit(UserErrorExitCode);
+                            }
                         }
-                        else
+                        catch (Exception e)
                         {
-                            Environment.Exit(UserErrorExitCode);
+                            Error(section, e.Message);
+                            Environment.Exit(UnexpectedErrorExitCode);
                         }
-                    }
-                    catch (Exception e)
-                    {
-                        Error(section, e.Message);
-                        Environment.Exit(UnexpectedErrorExitCode);
-                    }
+                    });
+                    Info(section, elapsedTime);
                 });
             }
         }
@@ -204,6 +214,17 @@ namespace Xtensible.MangoSeed.CommandLine
             Console.WriteLine(Bold(Mango(section)) + " " + VibrantGreen(info));
         }
 
+        private static void Info(string section, TimeSpan elapsedTime)
+        {
+            var time = elapsedTime.TotalMilliseconds switch {
+                < 1_000 => $"{elapsedTime.TotalMilliseconds}ms",
+                >= 1_000 and < 60_000 => $"{elapsedTime.TotalSeconds}s",
+                >= 60_000 and < 3_600_000 => $"{elapsedTime.TotalMinutes}m",
+                _ => $"{elapsedTime.TotalHours}h"
+            };
+            Info(section, $"Took {time} to complete");
+        }
+
         private static void Error(string section, string error)
         {
             Console.WriteLine(Mango(section) + " " + Red(error));
@@ -257,6 +278,14 @@ namespace Xtensible.MangoSeed.CommandLine
                                 :-----====+++++********############*****...         
 ";
             Console.WriteLine(VibrantGreen(leaf) + Mango(mango));
+        }
+
+        private async static Task<TimeSpan> TimedOperation(Func<Task> operation)
+        {
+            var stopwatch = Stopwatch.StartNew();
+            await operation();
+            stopwatch.Stop();
+            return stopwatch.Elapsed;
         }
     }
 }

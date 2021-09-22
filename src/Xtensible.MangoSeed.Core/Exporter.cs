@@ -36,7 +36,7 @@ namespace Xtensible.MangoSeed.Core
 
             var cursor = await collection.FindAsync(parsedQuery, cancellationToken: cancellationToken);
 
-            var newLine = Encoding.UTF8.GetBytes("\n\n");
+            var newLine = Encoding.UTF8.GetBytes("\n");
             var count = 0;
             while (await cursor.MoveNextAsync(cancellationToken))
             {
@@ -52,7 +52,7 @@ namespace Xtensible.MangoSeed.Core
                         await outStream.WriteAsync(newLine);
                     }
 
-                    var json = doc.ToJson(new JsonWriterSettings { Indent = exportSettings.PrettyPrint });
+                    var json = doc.ToJson(new JsonWriterSettings { Indent = exportSettings.PrettyPrint, NewLineChars = "\n"});
                     var buffer = Encoding.UTF8.GetBytes(json);
                     await outStream.WriteAsync(buffer, cancellationToken);
                     count++;

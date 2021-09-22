@@ -164,7 +164,7 @@ namespace Xtensible.MangoSeed.Core
                     continue;
                 }
 
-                if (line == "")
+                if (line == "{" && sb.Length > 0)
                 {
                     var record = sb.ToString();
                     yield return BsonDocument.Parse(record);
