@@ -69,7 +69,7 @@ namespace Xtensible.MangoSeed.Core
             await TruncateDataAsync(db, collection, existingEntryBehavior);
             using var sr = new StreamReader(file);
             var batch = new List<BsonDocument>(batchSize);
-            await foreach (var d in GetRecordsAsync(sr))
+            await foreach (var d in GetRecordsAsync(sr, file, progressReporter))
             {
                 recordCount++;
                 if (batch.Count < batchSize)
@@ -153,22 +153,33 @@ namespace Xtensible.MangoSeed.Core
             }
         }
 
-        private async IAsyncEnumerable<BsonDocument> GetRecordsAsync(StreamReader stream)
+        private async IAsyncEnumerable<BsonDocument> GetRecordsAsync(StreamReader stream, string source,
+            Action<Result> progressReporter)
         {
             var sb = new StringBuilder();
             var line = await stream.ReadLineAsync();
+            var parseSuccessResult = new Result(true, String.Empty);
+            var lineNumber = 0;
             while (line != null)
             {
+                lineNumber++;
                 if (line.StartsWith("/"))
                 {
                     continue;
                 }
 
-                if (line == "{" && sb.Length > 0)
+                if (line.StartsWith("{") && sb.Length > 0)
                 {
-                    var record = sb.ToString();
-                    yield return BsonDocument.Parse(record);
-                    sb.Clear();
+                    var (doc, result) = getCurrentDocument();
+                    if (result.IsSuccess)
+                    {
+                        yield return doc;
+                    }
+                    else
+                    {
+                        progressReporter(result);
+                    }
+                   
                 }
 
                 sb.Append(line);
@@ -177,8 +188,29 @@ namespace Xtensible.MangoSeed.Core
 
             if (sb.Length > 0)
             {
-                yield return BsonDocument.Parse(sb.ToString());
+                var (doc, result) = getCurrentDocument();
+                if (result.IsSuccess)
+                {
+                    yield return doc;
+                }
+                else
+                {
+                    progressReporter(result);
+                }
             }
+
+            (BsonDocument doc, Result result) getCurrentDocument()
+            {
+                var record = sb.ToString();
+                sb.Clear();
+                if (!BsonDocument.TryParse(record, out BsonDocument doc))
+                {
+                    return (doc, new Result(false, $"Error parsing one or near line {lineNumber} in {source}"));
+                }
+
+                return (doc, parseSuccessResult);
+            }
+            
         }
     }
 }
