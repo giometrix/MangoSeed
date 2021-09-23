@@ -183,8 +183,9 @@ namespace Xtensible.MangoSeed.CommandLine
 
             var authMechanism = options.AuthenticationMechanism?.Trim();
             var useTls = options.TlsEnabled;
+            var allowInsecureTls = options.AllowInsecureTls;
 
-            return new MongoSettings(server, authMechanism, useTls, username, password, authDb);
+            return new MongoSettings(server, authMechanism, useTls, allowInsecureTls, username, password, authDb);
         }
 
         private static ExportSettings GetExportSettings(ExportOptions exportOptions)
@@ -227,7 +228,7 @@ namespace Xtensible.MangoSeed.CommandLine
 
         private static void Error(string section, string error)
         {
-            Console.WriteLine(Mango(section) + " " + Red(error));
+            Console.Error.WriteLine(Mango(section) + " " + Red(error));
         }
 
         private static void Logo(bool skip)
