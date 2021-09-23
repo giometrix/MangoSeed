@@ -25,7 +25,7 @@ namespace Xtensible.MangoSeed.Core
             ExportSettings? exportSettings = null, CancellationToken cancellationToken = default)
         {
             exportSettings ??= _defaultSettings;
-            var client = MongoClientFactory.Create(_mongoSettings);
+            var client = MongoClientFactory.Create(_mongoSettings).WithReadPreference(ReadPreference.SecondaryPreferred);
 
             var db = client.GetDatabase(database);
             var collection = db.GetCollection<BsonDocument>(collectionName);
@@ -38,6 +38,7 @@ namespace Xtensible.MangoSeed.Core
 
             var newLine = Encoding.UTF8.GetBytes("\n");
             var count = 0;
+            var jsonWriterSettings = new JsonWriterSettings {Indent = exportSettings.PrettyPrint, NewLineChars = "\n"};
             while (await cursor.MoveNextAsync(cancellationToken))
             {
                 if (cancellationToken.IsCancellationRequested)
@@ -52,7 +53,7 @@ namespace Xtensible.MangoSeed.Core
                         await outStream.WriteAsync(newLine);
                     }
 
-                    var json = doc.ToJson(new JsonWriterSettings { Indent = exportSettings.PrettyPrint, NewLineChars = "\n"});
+                    var json = doc.ToJson(jsonWriterSettings);
                     var buffer = Encoding.UTF8.GetBytes(json);
                     await outStream.WriteAsync(buffer, cancellationToken);
                     count++;

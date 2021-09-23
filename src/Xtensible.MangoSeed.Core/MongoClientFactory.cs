@@ -14,10 +14,11 @@ namespace Xtensible.MangoSeed.Core
             }
 
             MongoClient client;
-            MongoClientSettings mongoClientSettings = new() {
+            var mongoClientSettings = new MongoClientSettings {
                 Server = new MongoServerAddress(server[0], Int32.Parse(server[1])),
                 ApplicationName = "MangoSeed",
-                UseTls = settings.UseTls
+                UseTls = settings.UseTls,
+                AllowInsecureTls = settings.AllowInsecureTls
             };
 
             if (!String.IsNullOrEmpty(settings.Username))
