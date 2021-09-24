@@ -44,7 +44,8 @@ namespace Xtensible.MangoSeed.Core
 
             await files.ParallelForEachAsync(async file =>
             {
-                var numRecordsInFile = await ProcessFileAsync(file, database, importSettings, progressReporter).ConfigureAwait(false);
+                var numRecordsInFile = await ProcessFileAsync(file, database, importSettings, progressReporter)
+                    .ConfigureAwait(false);
                 lock (recordCountLock)
                 {
                     fileCount++;
@@ -118,7 +119,7 @@ namespace Xtensible.MangoSeed.Core
         {
             if (existingEntryBehavior == ExistingEntryBehavior.Ignore)
             {
-                var existingRecords = await GetExistingRecordsAsync(collection, batch);
+                var existingRecords = await GetExistingRecordsAsync(collection, batch).ConfigureAwait(false);
                 return batch.Where(d => !existingRecords.Contains(d["_id"].AsObjectId));
             }
 

@@ -107,8 +107,8 @@ namespace Xtensible.MangoSeed.CommandLine
                             await using var fileStream = File.CreateText(destination);
                             var exportResult = await exporter.ExportAsync(options.Database, options.Collection,
                                 options.Query,
-                                fileStream.BaseStream, GetExportSettings(options));
-                            await fileStream.FlushAsync();
+                                fileStream.BaseStream, GetExportSettings(options)).ConfigureAwait(false);
+                            await fileStream.FlushAsync().ConfigureAwait(false);
                             Log(section, exportResult);
                             if (exportResult.IsSuccess)
                             {
@@ -124,9 +124,10 @@ namespace Xtensible.MangoSeed.CommandLine
                             Error(section, e.Message);
                             Environment.Exit(UnexpectedErrorExitCode);
                         }
-                    });
+                    }).ConfigureAwait(false);
+
                     Info(section, elapsedTime);
-                });
+                }).ConfigureAwait(false);
             }
         }
 
@@ -210,9 +211,9 @@ namespace Xtensible.MangoSeed.CommandLine
             }
         }
 
-        private static void Info(string section, string info)
+        private static void Info(string section, string message)
         {
-            Console.WriteLine(Bold(Mango(section)) + " " + VibrantGreen(info));
+            Console.WriteLine(Bold(Mango(section)) + " " + VibrantGreen(message));
         }
 
         private static void Info(string section, TimeSpan elapsedTime)
@@ -226,9 +227,9 @@ namespace Xtensible.MangoSeed.CommandLine
             Info(section, $"Took {time} to complete");
         }
 
-        private static void Error(string section, string error)
+        private static void Error(string section, string message)
         {
-            Console.Error.WriteLine(Mango(section) + " " + Red(error));
+            Console.Error.WriteLine(Mango(section) + " " + Red(message));
         }
 
         private static void Logo(bool skip)

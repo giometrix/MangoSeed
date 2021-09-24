@@ -35,7 +35,8 @@ namespace Xtensible.MangoSeed.Core
                 return new Result(false, $"{query} could not be parsed");
             }
 
-            var cursor = await collection.FindAsync(parsedQuery, cancellationToken: cancellationToken).ConfigureAwait(false);
+            var cursor = await collection.FindAsync(parsedQuery, cancellationToken: cancellationToken)
+                .ConfigureAwait(false);
 
             var newLine = Encoding.UTF8.GetBytes("\n");
             var count = 0;

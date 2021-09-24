@@ -77,7 +77,7 @@ namespace Xtensible.MangoSeed.Core.Tests
             var importer = new Importer(new MongoSettings(MongoServer));
             await Assert.ThrowsAsync<ParallelForEachException>(async () =>
             {
-                var result = await importer.ImportAsync("test", new[] {"./data/exported/animals.json"},
+                await importer.ImportAsync("test", new[] {"./data/exported/animals.json"},
                     new ImportSettings(5, 5, ExistingEntryBehavior.None));
             });
         }
