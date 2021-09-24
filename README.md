@@ -18,12 +18,12 @@ _MangoSeed_ is a cross platform utility (Linux, Windows, OSX) that can be run st
 ### Installation
 To install _MangeSeed_ as a .net global tool, run the following command:
 ```bash
-dotnet tool install --global MangoSeed --version 1.0.0
+dotnet tool install --global MangoSeed
 ```
 You can also install _MangoSeed_ as a local tool:
 ```bash
 dotnet new tool-manifest # if you are setting up this repo
-dotnet tool install --local MangoSeed --version 1.0.0
+dotnet tool install --local MangoSeed
 ```
 
 :pencil2: **Note**
