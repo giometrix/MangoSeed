@@ -24,7 +24,7 @@ dotnet tool install --local MangoSeed --version 1.0.0
 
 :pencil2: **Note**
 
-If you using zsh, dotnet tool does not add it's director to your paths.  You can resolve this by adding the following to ~/.zshrc
+If you are using zsh, the dotnet tool installer does not add it's tools directory to your paths.  You can resolve this by adding the following to ~/.zshrc
 ```bash
 export PATH=$HOME/.dotnet/tools:$PATH
 ```
