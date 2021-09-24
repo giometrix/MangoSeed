@@ -11,15 +11,34 @@
         <Description>A command line wrapper around MangoSeed.Core to Import/Export data from MongoDb</Description>
         <PackAsTool>true</PackAsTool>
         <ToolCommandName>mangoseed</ToolCommandName>
+        <PackageVersion>1.0.0.0</PackageVersion>
+        <Title>MangoSeed</Title>
+        <Copyright>Giovanni Galbo  © 2021</Copyright>
+        <PackageProjectUrl>https://github.com/giometrix/MangoSeed</PackageProjectUrl>
+        <RepositoryUrl>https://github.com/giometrix/MangoSeed</RepositoryUrl>
+        <PackageTags>mongodb mongo seed mangoseed mango import export xtensible</PackageTags>
+        <PackageReleaseNotes>Initial release</PackageReleaseNotes>
+        <PackageIcon>xtensible-x.png</PackageIcon>
     </PropertyGroup>
 
+    <PropertyGroup>
+        <IncludeSymbols>true</IncludeSymbols>
+        <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+    </PropertyGroup>
+    
     <ItemGroup>
         <PackageReference Include="CommandLineParser" Version="2.8.0" />
         <PackageReference Include="Crayon" Version="2.0.62" />
     </ItemGroup>
-
+    
     <ItemGroup>
         <ProjectReference Include="..\Xtensible.MangoSeed.Core\Xtensible.MangoSeed.Core.csproj" />
+    </ItemGroup>
+    <ItemGroup>
+        <None Include="..\..\xtensible-x.png">
+            <Pack>True</Pack>
+            <PackagePath></PackagePath>
+        </None>
     </ItemGroup>
 
 </Project>

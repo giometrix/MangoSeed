@@ -1,18 +1,36 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net5.0</TargetFramework>
       <Nullable>enable</Nullable>
       <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
       <Authors>Giovanni Galbo</Authors>
-      <Description>Import/Export data from MongoDb</Description>
+      <Description>A library for importing and exporting data from MongoDb</Description>
       <PackageLicenseExpression>MIT</PackageLicenseExpression>
       <PackageId>MangoSeed.Core</PackageId>
+      <Title>MangoSeed.Core</Title>
+      <Copyright>Giovanni Galbo  © 2021</Copyright>
+      <PackageProjectUrl>https://github.com/giometrix/MangoSeed</PackageProjectUrl>
+      <RepositoryUrl>https://github.com/giometrix/MangoSeed</RepositoryUrl>
+      <PackageTags>mongodb mongo seed mangoseed mango import export xtensible</PackageTags>
+      <PackageReleaseNotes>Added documentation</PackageReleaseNotes>
+      <TargetFramework>net5.0</TargetFramework>
+      <PackageVersion>1.0.1.0</PackageVersion>
+      <PackageIcon>xtensible-x.png</PackageIcon>
   </PropertyGroup>
+    <PropertyGroup>
+        <IncludeSymbols>true</IncludeSymbols>
+        <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+    </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="AsyncEnumerator" Version="4.0.2" />
     <PackageReference Include="MongoDB.Driver" Version="2.13.1" />
   </ItemGroup>
 
+    <ItemGroup>
+        <None Include="..\..\xtensible-x.png">
+            <Pack>True</Pack>
+            <PackagePath></PackagePath>
+        </None>
+    </ItemGroup>
 </Project>

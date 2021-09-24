@@ -3,7 +3,10 @@ using MongoDB.Driver;
 
 namespace Xtensible.MangoSeed.Core
 {
-    public static class MongoClientFactory
+    /// <summary>
+    /// Creates mongo clients with the provided options
+    /// </summary>
+    internal static class MongoClientFactory
     {
         public static MongoClient Create(MongoSettings settings)
         {
@@ -12,8 +15,6 @@ namespace Xtensible.MangoSeed.Core
             {
                 throw new InvalidOperationException($"{settings.Server} is not a valid address");
             }
-
-            MongoClient client;
             var mongoClientSettings = new MongoClientSettings {
                 Server = new MongoServerAddress(server[0], Int32.Parse(server[1])),
                 ApplicationName = "MangoSeed",
