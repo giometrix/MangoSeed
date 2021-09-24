@@ -11,13 +11,13 @@
         <Description>A command line wrapper around MangoSeed.Core to Import/Export data from MongoDb</Description>
         <PackAsTool>true</PackAsTool>
         <ToolCommandName>mangoseed</ToolCommandName>
-        <PackageVersion>1.0.0.0</PackageVersion>
+        <PackageVersion>1.0.1.0</PackageVersion>
         <Title>MangoSeed</Title>
         <Copyright>Giovanni Galbo  © 2021</Copyright>
         <PackageProjectUrl>https://github.com/giometrix/MangoSeed</PackageProjectUrl>
         <RepositoryUrl>https://github.com/giometrix/MangoSeed</RepositoryUrl>
         <PackageTags>mongodb mongo seed mangoseed mango import export xtensible</PackageTags>
-        <PackageReleaseNotes>Initial release</PackageReleaseNotes>
+        <PackageReleaseNotes>Minor performance enhancements</PackageReleaseNotes>
         <PackageIcon>xtensible-x.png</PackageIcon>
     </PropertyGroup>
 

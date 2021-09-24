@@ -12,9 +12,9 @@
       <PackageProjectUrl>https://github.com/giometrix/MangoSeed</PackageProjectUrl>
       <RepositoryUrl>https://github.com/giometrix/MangoSeed</RepositoryUrl>
       <PackageTags>mongodb mongo seed mangoseed mango import export xtensible</PackageTags>
-      <PackageReleaseNotes>Added documentation</PackageReleaseNotes>
+      <PackageReleaseNotes>Minor performance enhancements</PackageReleaseNotes>
       <TargetFramework>net5.0</TargetFramework>
-      <PackageVersion>1.0.1.0</PackageVersion>
+      <PackageVersion>1.0.2.0</PackageVersion>
       <PackageIcon>xtensible-x.png</PackageIcon>
   </PropertyGroup>
     <PropertyGroup>

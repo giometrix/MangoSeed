@@ -27,9 +27,10 @@ namespace Xtensible.MangoSeed.CommandLine
 
         [Option('t', "tls-enabled", Required = false, HelpText = "Use TLS", Default = false)]
         public bool TlsEnabled { get; set; }
-        [Option(longName:"allow-insecure-tls", HelpText = "Relax TLS constraints as much as possible.", Default = false)]
+
+        [Option("allow-insecure-tls", HelpText = "Relax TLS constraints as much as possible.", Default = false)]
         public bool AllowInsecureTls { get; set; }
-        
+
         [Option('d', "db", Required = true, HelpText = "Mongo Database to use")]
         public string Database { get; set; } = null!;
     }
@@ -52,7 +53,7 @@ namespace Xtensible.MangoSeed.CommandLine
     }
 
     [Verb("import", true)]
-    public class ImportOptions : SharedOptions
+    abstract public class ImportOptions : SharedOptions
     {
         [Option('f', "seed-file-path", Required = true,
             HelpText = "Seed path. Can be single json file or directory containing json seed files")]

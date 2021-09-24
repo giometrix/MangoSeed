@@ -14,13 +14,13 @@ namespace Xtensible.MangoSeed.Core.Tests
             Mongo.Import("test", "animals", "./data/animals.json", true);
         }
 
+        private MongoDbRunner Mongo { get; }
+        private string MongoServer => Mongo.ConnectionString.Replace("mongodb://", "").Replace("/", "");
+
         public void Dispose()
         {
             Mongo.Dispose();
         }
-
-        private MongoDbRunner Mongo { get; }
-        private string MongoServer => Mongo.ConnectionString.Replace("mongodb://", "").Replace("/", "");
 
         [Fact]
         public async Task export_all_documents_in_collection()

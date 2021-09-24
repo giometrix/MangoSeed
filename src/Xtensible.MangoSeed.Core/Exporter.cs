@@ -25,7 +25,8 @@ namespace Xtensible.MangoSeed.Core
             ExportSettings? exportSettings = null, CancellationToken cancellationToken = default)
         {
             exportSettings ??= _defaultSettings;
-            var client = MongoClientFactory.Create(_mongoSettings).WithReadPreference(ReadPreference.SecondaryPreferred);
+            var client = MongoClientFactory.Create(_mongoSettings)
+                .WithReadPreference(ReadPreference.SecondaryPreferred);
 
             var db = client.GetDatabase(database);
             var collection = db.GetCollection<BsonDocument>(collectionName);
@@ -34,12 +35,12 @@ namespace Xtensible.MangoSeed.Core
                 return new Result(false, $"{query} could not be parsed");
             }
 
-            var cursor = await collection.FindAsync(parsedQuery, cancellationToken: cancellationToken);
+            var cursor = await collection.FindAsync(parsedQuery, cancellationToken: cancellationToken).ConfigureAwait(false);
 
             var newLine = Encoding.UTF8.GetBytes("\n");
             var count = 0;
             var jsonWriterSettings = new JsonWriterSettings {Indent = exportSettings.PrettyPrint, NewLineChars = "\n"};
-            while (await cursor.MoveNextAsync(cancellationToken))
+            while (await cursor.MoveNextAsync(cancellationToken).ConfigureAwait(false))
             {
                 if (cancellationToken.IsCancellationRequested)
                 {
@@ -50,12 +51,12 @@ namespace Xtensible.MangoSeed.Core
                 {
                     if (count > 0)
                     {
-                        await outStream.WriteAsync(newLine);
+                        await outStream.WriteAsync(newLine, cancellationToken).ConfigureAwait(false);
                     }
 
                     var json = doc.ToJson(jsonWriterSettings);
                     var buffer = Encoding.UTF8.GetBytes(json);
-                    await outStream.WriteAsync(buffer, cancellationToken);
+                    await outStream.WriteAsync(buffer, cancellationToken).ConfigureAwait(false);
                     count++;
                 }
             }

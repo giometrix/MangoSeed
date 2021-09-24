@@ -16,13 +16,13 @@ namespace Xtensible.MangoSeed.Core.Tests
             Mongo = MongoDbRunner.Start();
         }
 
+        private MongoDbRunner Mongo { get; }
+        private string MongoServer => Mongo.ConnectionString.Replace("mongodb://", "").Replace("/", "");
+
         public void Dispose()
         {
             Mongo.Dispose();
         }
-
-        private MongoDbRunner Mongo { get; }
-        private string MongoServer => Mongo.ConnectionString.Replace("mongodb://", "").Replace("/", "");
 
         private void Seed()
         {
@@ -34,7 +34,7 @@ namespace Xtensible.MangoSeed.Core.Tests
         {
             Seed();
             var importer = new Importer(new MongoSettings(MongoServer));
-            var result = await importer.ImportAsync("test", new[] { "./data/exported/animals.json" },
+            var result = await importer.ImportAsync("test", new[] {"./data/exported/animals.json"},
                 new ImportSettings(5, 5, ExistingEntryBehavior.Drop));
             Assert.True(result.IsSuccess);
             Assert.Equal("Import complete. Imported 3 records from 1 file", result.Message);
@@ -48,7 +48,7 @@ namespace Xtensible.MangoSeed.Core.Tests
             var collection = mongoDb.GetDatabase("test").GetCollection<BsonDocument>("animals");
             await collection.UpdateManyAsync("{}", BsonDocument.Parse("{$set:{name:'x'}}"));
             var importer = new Importer(new MongoSettings(MongoServer));
-            var result = await importer.ImportAsync("test", new[] { "./data/exported/animals.json" },
+            var result = await importer.ImportAsync("test", new[] {"./data/exported/animals.json"},
                 new ImportSettings(5, 5, ExistingEntryBehavior.Ignore));
             Assert.True(result.IsSuccess);
             Assert.Equal("Import complete. Imported 3 records from 1 file", result.Message);
@@ -61,7 +61,7 @@ namespace Xtensible.MangoSeed.Core.Tests
         public async Task import_existing_entry_behavior_of_none()
         {
             var importer = new Importer(new MongoSettings(MongoServer));
-            var result = await importer.ImportAsync("test", new[] { "./data/exported/animals.json" },
+            var result = await importer.ImportAsync("test", new[] {"./data/exported/animals.json"},
                 new ImportSettings(5, 5, ExistingEntryBehavior.None));
             Assert.True(result.IsSuccess);
             Assert.Equal("Import complete. Imported 3 records from 1 file", result.Message);
@@ -77,7 +77,7 @@ namespace Xtensible.MangoSeed.Core.Tests
             var importer = new Importer(new MongoSettings(MongoServer));
             await Assert.ThrowsAsync<ParallelForEachException>(async () =>
             {
-                var result = await importer.ImportAsync("test", new[] { "./data/exported/animals.json" },
+                var result = await importer.ImportAsync("test", new[] {"./data/exported/animals.json"},
                     new ImportSettings(5, 5, ExistingEntryBehavior.None));
             });
         }
@@ -90,7 +90,7 @@ namespace Xtensible.MangoSeed.Core.Tests
             var collection = mongoDb.GetDatabase("test").GetCollection<BsonDocument>("animals");
             await collection.UpdateManyAsync("{}", BsonDocument.Parse("{$set:{name:'x'}}"));
             var importer = new Importer(new MongoSettings(MongoServer));
-            var result = await importer.ImportAsync("test", new[] { "./data/exported/animals.json" },
+            var result = await importer.ImportAsync("test", new[] {"./data/exported/animals.json"},
                 new ImportSettings(5, 5, ExistingEntryBehavior.Truncate));
             Assert.True(result.IsSuccess);
             Assert.Equal("Import complete. Imported 3 records from 1 file", result.Message);
@@ -104,7 +104,7 @@ namespace Xtensible.MangoSeed.Core.Tests
         {
             Seed();
             var importer = new Importer(new MongoSettings(MongoServer));
-            var result = await importer.ImportAsync("test", new[] { "./data/exported/animals.json" },
+            var result = await importer.ImportAsync("test", new[] {"./data/exported/animals.json"},
                 new ImportSettings(5, 5, ExistingEntryBehavior.Truncate));
             Assert.True(result.IsSuccess);
             Assert.Equal("Import complete. Imported 3 records from 1 file", result.Message);

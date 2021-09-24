@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Globalization;
 using System.IO;
 using System.Reflection;
 using System.Threading.Tasks;
@@ -12,7 +11,7 @@ using static Crayon.Output;
 
 namespace Xtensible.MangoSeed.CommandLine
 {
-    internal class Program
+    internal static class Program
     {
         private const string MongoSeedPasswordEnvVariable = "MANGOSEED_DB_PW";
         private const int UserErrorExitCode = 1;
@@ -72,12 +71,12 @@ namespace Xtensible.MangoSeed.CommandLine
                         {
                             Info(section, $"{source} is a directory, recursively processing all .json files ...");
                             var files = Directory.EnumerateFiles(source, "*.json", SearchOption.AllDirectories);
-                            await ProcessImport(mongoSettings, files, options, section);
+                            await ProcessImport(mongoSettings, files, options, section).ConfigureAwait(false);
                         }
                         else if (File.Exists($"{source}"))
                         {
                             Info(section, $"{source} is a file, processing...");
-                            await ProcessImport(mongoSettings, new[] { source }!, options, section);
+                            await ProcessImport(mongoSettings, new[] {source}!, options, section).ConfigureAwait(false);
                         }
                         else
                         {
@@ -106,7 +105,8 @@ namespace Xtensible.MangoSeed.CommandLine
                             Info(section,
                                 $"Querying {options.Server}/{options.Database}/{options.Collection} with query {options.Query}");
                             await using var fileStream = File.CreateText(destination);
-                            var exportResult = await exporter.ExportAsync(options.Database, options.Collection, options.Query,
+                            var exportResult = await exporter.ExportAsync(options.Database, options.Collection,
+                                options.Query,
                                 fileStream.BaseStream, GetExportSettings(options));
                             await fileStream.FlushAsync();
                             Log(section, exportResult);
@@ -140,7 +140,7 @@ namespace Xtensible.MangoSeed.CommandLine
                     r =>
                     {
                         Log(section, r);
-                    });
+                    }).ConfigureAwait(false);
 
                 Log(section, result);
             }
@@ -190,12 +190,12 @@ namespace Xtensible.MangoSeed.CommandLine
 
         private static ExportSettings GetExportSettings(ExportOptions exportOptions)
         {
-            return new ExportSettings(!exportOptions.DisablePrettyPrint);
+            return new(!exportOptions.DisablePrettyPrint);
         }
 
         private static ImportSettings GetImportSettings(ImportOptions options)
         {
-            return new ImportSettings(options.BatchSize, options.MaxDegreeOfParallelism, options.ExistingEntryBehavior);
+            return new(options.BatchSize, options.MaxDegreeOfParallelism, options.ExistingEntryBehavior);
         }
 
         private static void Log(string section, Result result)
@@ -284,7 +284,7 @@ namespace Xtensible.MangoSeed.CommandLine
         private async static Task<TimeSpan> TimedOperation(Func<Task> operation)
         {
             var stopwatch = Stopwatch.StartNew();
-            await operation();
+            await operation().ConfigureAwait(false);
             stopwatch.Stop();
             return stopwatch.Elapsed;
         }
