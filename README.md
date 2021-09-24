@@ -1,5 +1,5 @@
 # MangoSeed
-![Nuget (with prereleases)](https://img.shields.io/nuget/vpre/MangoSeed?label=CLI&style=for-the-badge) ![Nuget (with prereleases)](https://img.shields.io/nuget/vpre/MangoSeed.Core?color=green&label=Library&style=for-the-badge)
+[![Nuget (with prereleases)](https://img.shields.io/nuget/vpre/MangoSeed?label=CLI&style=for-the-badge)](https://www.nuget.org/packages/MangoSeed/) [![Nuget (with prereleases)](https://img.shields.io/nuget/vpre/MangoSeed.Core?color=green&label=Library&style=for-the-badge)](https://www.nuget.org/packages/MangoSeed.Core/)
 
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/7efb6e80c6a1438e983fb369a9551f8f)](https://app.codacy.com/gh/giometrix/MangoSeed?utm_source=github.com&utm_medium=referral&utm_content=giometrix/MangoSeed&utm_campaign=Badge_Grade_Settings)
 [![Build status](https://ci.appveyor.com/api/projects/status/uc792o6b8l1ujiom?svg=true)](https://ci.appveyor.com/project/giometrix/mangoseed)
